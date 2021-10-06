@@ -47,33 +47,30 @@ data[" Vpeak"] = Vpeak
 
 # hrPPG - heart rate
 hrPPG   = data[' HRppg'].to_numpy()
-# AfibAB  = data[' AfibAB'].to_numpy() 
-# Debug   = data[' Debug'].to_numpy() 
-
-
-# AfibAB  = AfibAB[IndexOriginal]
-# Debug   = Debug[IndexOriginal]
-
 hrPPG[IndexAligned[IndexAligned>0]]  = hrPPG[IndexOriginal[IndexAligned>0]]
 hrPPG[IndexOriginal] = 0
 data[' HRppg']= hrPPG
 
 V= data[[" PPG"," Vpeak"," HRppg"]]
 
-# V.to_csv('mmm.csv')
+# Flags delay compensation: 
+# -----------------------------------------
 
-
-AccFlag = data[' Acc'].tolist()
-ArtFlag = data[' Art'].tolist()
-SnrFlag = data[' Ppg'].tolist()
-
+AccFlag = data[' Acc'].tolist()                         # 6D flag
+ArtFlag = data[' Art'].tolist()                         # Artifact flag
+SnrFlag = data[' Ppg'].tolist()                         # SNR flag
+AF_PPG = data[' PpgAF'].tolist()                        # AF PPG flag
+FindParameters = data[' PrePostFP'].tolist()
 
 data[' Acc'] = AccFlag[DelayPPG:] + zerolistmaker(DelayPPG)
 data[' Art'] = ArtFlag[DelayPPG:] + zerolistmaker(DelayPPG)
 data[' Ppg'] = SnrFlag[DelayPPG:] + zerolistmaker(DelayPPG)
+data[' PpgAF'] = AF_PPG[DelayPPG:] + zerolistmaker(DelayPPG)
+data[' PrePostFP'] = FindParameters[DelayPPG:] + zerolistmaker(DelayPPG)
+
 
 V= data[[" PPG"," Vpeak"," HRppg"," Acc"," Art"," Ppg"]]
-data.to_csv('mmm.csv')
+data.to_csv('m1.csv',index=False)
 
 
 
