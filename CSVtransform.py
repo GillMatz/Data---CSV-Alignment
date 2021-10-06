@@ -14,12 +14,12 @@ def zerolistmaker(n):
     listofzeros = [0] * n
     return listofzeros
 
-def CSVtransform(files):
+def CSVtransform(fullpath):
     FsPPG = 64                  # 64 Hz
     DelayPPG    = 19*FsPPG-1    # 19 [sec] delay
     
     # Reading the CSV file
-    data = pd.read_csv(files)
+    data = pd.read_csv(fullpath)
     
     # PPG - peak based events: 
     # -------------------------
@@ -62,7 +62,7 @@ def CSVtransform(files):
     
     
    # V= data[[" PPG"," Vpeak"," HRppg"," Acc"," Art"," Ppg"]]
-    data.to_csv('m1.csv',index=False)
+    data.to_csv(fullpath,index=False)
 
 
 
