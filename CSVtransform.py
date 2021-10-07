@@ -10,6 +10,8 @@ Transformation of the CSV file.
 import pandas as pd
 import numpy as np
 
+
+
 def zerolistmaker(n):
     listofzeros = [0] * n
     return listofzeros
@@ -62,8 +64,12 @@ def CSVtransform(fullpath):
     
     
    # V= data[[" PPG"," Vpeak"," HRppg"," Acc"," Art"," Ppg"]]
-    data.to_csv(fullpath,index=False)
+    data.to_csv('mmm.csv',index=False)
 
+# reading file name and path from txt
+with open ("FileName.txt", "r") as myfile:
+    filename = myfile.readlines()
 
-
+# call function with the name from the FileName.txt
+CSVtransform(str(filename))
 
