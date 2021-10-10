@@ -61,15 +61,20 @@ def CSVtransform(fullpath):
     data[' Ppg'] = SnrFlag[DelayPPG:] + zerolistmaker(DelayPPG)
     data[' PpgAF'] = AF_PPG[DelayPPG:] + zerolistmaker(DelayPPG)
     data[' PrePostFP'] = FindParameters[DelayPPG:] + zerolistmaker(DelayPPG)
-    
-    
-   # V= data[[" PPG"," Vpeak"," HRppg"," Acc"," Art"," Ppg"]]
-    data.to_csv('mmm.csv',index=False)
+
+    fullpath = fullpath.replace('.csv','_aligned.csv')
+    data.to_csv(fullpath,index=False)
+    # data.to_csv('new.csv',index=False)
 
 # reading file name and path from txt
 with open ("FileName.txt", "r") as myfile:
     filename = myfile.readlines()
 
-# call function with the name from the FileName.txt
-CSVtransform(str(filename))
+filename = str(filename) # casting 
+filename = filename[1:-1]
+filename = filename.replace('\\\\','\\')
 
+# call function with the name from the FileName.txt
+CSVtransform(filename[1:-1])
+
+#CSVtransform(filename)
