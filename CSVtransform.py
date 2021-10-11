@@ -17,13 +17,8 @@ def zerolistmaker(n):
     listofzeros = [0] * n
     return listofzeros
 
-def CSVtransform():
+def CSVtransform(fullpath):
     
-    # Choosing file: 
-    # ---------------
-    root = tk.Tk()
-    root.withdraw()
-    fullpath = filedialog.askopenfilenames(parent=root, initialdir="/", title='Please select files')
 
     FsPPG = 64                  # 64 Hz
     DelayPPG    = 19*FsPPG-1    # 19 [sec] delay
@@ -93,13 +88,12 @@ def CSVtransform():
     fullpath = fullpath.replace('.csv','_aligned.csv')
     data.to_csv(fullpath,index=False)
     
-# reading file name and path from txt
-with open ("FileName.txt", "r") as myfile:
-    filename = myfile.readlines()
 
-filename = str(filename) # casting 
-filename = filename[1:-1]
-filename = filename.replace('\\\\','\\')
+# Choosing file: 
+# ---------------
+root = tk.Tk()
+root.withdraw()
+filename = filedialog.askopenfilenames(parent=root, initialdir="/", title='Please select files')
 
 # call function with the name from the FileName.txt
 CSVtransform(filename[1:-1])
