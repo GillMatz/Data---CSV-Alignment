@@ -20,6 +20,9 @@ def CSVtransform(fullpath):
     FsPPG = 64                  # 64 Hz
     DelayPPG    = 19*FsPPG-1    # 19 [sec] delay
     
+    FsECG = 128
+    DelayECG   = int(2.5*FsECG-1)      # 19 [sec] delay
+    
     # Reading the CSV file
     data = pd.read_csv(fullpath)
     
@@ -43,7 +46,24 @@ def CSVtransform(fullpath):
     hrPPG[IndexOriginal] = 'nan'
     data[' HRppg']= hrPPG
     
- #   V= data[[" PPG"," Vpeak"," HRppg"]]
+    # ECG- peak based events: 
+    # -------------------------
+    ECGpeak   = data[' ECGtime'].to_numpy()                                     # Converting DataFrame series into NumPy array
+    IndexOriginalEcg   = np.asarray(np.where(ECGpeak!=0))
+    ValEcg     = ECGpeak[IndexOriginalEcg]
+    
+    ECGpeak[IndexOriginalEcg] = 0                                                 # zeroing all original Vpeak values.
+    IndexAlignedEcg = IndexOriginalEcg - ValEcg - DelayECG                     # Aliging peak location and Delay compensation.          
+    ECGpeak[IndexAlignedEcg[IndexAlignedEcg>0]]  = 1                             # subtitute with 1 in the right location. 
+    
+    data[' ECGtime'] = ECGpeak 
+    
+    # hrECG - heart rate
+    hrECG   = data[' HRecg'].to_numpy()
+    hrECG[IndexAlignedEcg[IndexAlignedEcg>0]]  = hrECG[IndexOriginalEcg[IndexAlignedEcg>0]]
+    hrECG[IndexOriginalEcg] = 'nan'
+    data[' HRecg']= hrECG
+    
     
     # Flags delay compensation: 
     # -----------------------------------------
@@ -54,6 +74,8 @@ def CSVtransform(fullpath):
     AF_PPG = data[' PpgAF'].tolist()                                        # AF PPG flag
     FindParameters = data[' PrePostFP'].tolist()
     
+    
+    
     data[' Acc'] = AccFlag[DelayPPG:] + zerolistmaker(DelayPPG)
     data[' Art'] = ArtFlag[DelayPPG:] + zerolistmaker(DelayPPG)
     data[' Ppg'] = SnrFlag[DelayPPG:] + zerolistmaker(DelayPPG)
@@ -62,8 +84,7 @@ def CSVtransform(fullpath):
 
     fullpath = fullpath.replace('.csv','_aligned.csv')
     data.to_csv(fullpath,index=False)
-    # data.to_csv('new.csv',index=False)
-
+    
 # reading file name and path from txt
 with open ("FileName.txt", "r") as myfile:
     filename = myfile.readlines()
