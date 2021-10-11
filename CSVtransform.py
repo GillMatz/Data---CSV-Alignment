@@ -27,22 +27,20 @@ def CSVtransform(fullpath):
     # -------------------------
     
     # Vpeak - peaks location
-    Vpeak   = data[' Vpeak'].to_numpy()                                 # Converting DataFrame series into NumPy array
+    Vpeak   = data[' Vpeak'].to_numpy()                                     # Converting DataFrame series into NumPy array
     IndexOriginal   = np.asarray(np.where(Vpeak!=0))
     Val     = Vpeak[IndexOriginal]
     
-    Vpeak[IndexOriginal] = 0                                            # zeroing all original Vpeak values.
-    IndexAligned = IndexOriginal - Val - DelayPPG                       # Aliging peak location and Delay compensation.          
-    Vpeak[IndexAligned[IndexAligned>0]]  = 1                            # subtitute with 1 in the right location. 
+    Vpeak[IndexOriginal] = 0                                                # zeroing all original Vpeak values.
+    IndexAligned = IndexOriginal - Val - DelayPPG                           # Aliging peak location and Delay compensation.          
+    Vpeak[IndexAligned[IndexAligned>0]]  = 1                                # subtitute with 1 in the right location. 
     
     data[" Vpeak"] = Vpeak 
-    
-    
-    
+
     # hrPPG - heart rate
     hrPPG   = data[' HRppg'].to_numpy()
     hrPPG[IndexAligned[IndexAligned>0]]  = hrPPG[IndexOriginal[IndexAligned>0]]
-    hrPPG[IndexOriginal] = 0
+    hrPPG[IndexOriginal] = 'nan'
     data[' HRppg']= hrPPG
     
  #   V= data[[" PPG"," Vpeak"," HRppg"]]
@@ -50,10 +48,10 @@ def CSVtransform(fullpath):
     # Flags delay compensation: 
     # -----------------------------------------
     
-    AccFlag = data[' Acc'].tolist()                         # 6D flag
-    ArtFlag = data[' Art'].tolist()                         # Artifact flag
-    SnrFlag = data[' Ppg'].tolist()                         # SNR flag
-    AF_PPG = data[' PpgAF'].tolist()                        # AF PPG flag
+    AccFlag = data[' Acc'].tolist()                                         # 6D flag
+    ArtFlag = data[' Art'].tolist()                                         # Artifact flag
+    SnrFlag = data[' Ppg'].tolist()                                         # SNR flag
+    AF_PPG = data[' PpgAF'].tolist()                                        # AF PPG flag
     FindParameters = data[' PrePostFP'].tolist()
     
     data[' Acc'] = AccFlag[DelayPPG:] + zerolistmaker(DelayPPG)
@@ -76,5 +74,3 @@ filename = filename.replace('\\\\','\\')
 
 # call function with the name from the FileName.txt
 CSVtransform(filename[1:-1])
-
-#CSVtransform(filename)
