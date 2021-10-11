@@ -10,13 +10,21 @@ Transformation of the CSV file.
 import pandas as pd
 import numpy as np
 
-
+import tkinter as tk
+from tkinter import filedialog
 
 def zerolistmaker(n):
     listofzeros = [0] * n
     return listofzeros
 
-def CSVtransform(fullpath):
+def CSVtransform():
+    
+    # Choosing file: 
+    # ---------------
+    root = tk.Tk()
+    root.withdraw()
+    fullpath = filedialog.askopenfilenames(parent=root, initialdir="/", title='Please select files')
+
     FsPPG = 64                  # 64 Hz
     DelayPPG    = 19*FsPPG-1    # 19 [sec] delay
     
