@@ -96,4 +96,4 @@ root.withdraw()
 filename = filedialog.askopenfilenames(parent=root, initialdir="/", title='Please select files')
 
 # call function with the name from the FileName.txt
-CSVtransform(filename[1:-1])
+CSVtransform(filename[0])
