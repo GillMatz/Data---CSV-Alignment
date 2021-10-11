@@ -9,6 +9,7 @@ Transformation of the CSV file.
 
 import pandas as pd
 import numpy as np
+import os
 
 
 
@@ -84,9 +85,12 @@ def CSVtransform(fullpath):
 
     fullpath = fullpath.replace('.csv','_aligned.csv')
     data.to_csv(fullpath,index=False)
+
+#current directory
+directory = os.getcwd()
     
 # reading file name and path from txt
-with open ("FileName.txt", "r") as myfile:
+with open (directory + "\FileName.txt", "r") as myfile:
     filename = myfile.readlines()
 
 filename = str(filename) # casting 
