@@ -88,7 +88,6 @@ def CSVtransform(fullpath):
     fullpath = fullpath.replace('.csv','_aligned.csv')
     data.to_csv(fullpath,index=False)
     
-
 # Choosing file: 
 # ---------------
 root = tk.Tk()
